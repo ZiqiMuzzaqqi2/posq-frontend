@@ -1,7 +1,7 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import useAuthStore from "../../stores/authStore";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) {
@@ -16,7 +16,8 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  // Return Outlet untuk nested routes (MainLayout akan di-render di sini)
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
