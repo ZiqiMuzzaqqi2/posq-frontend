@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Custom global styles */
+/* @layer base {
+  body {
+    @apply bg-light text-dark font-sans;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-200 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary rounded-full;
+  }
+} */
