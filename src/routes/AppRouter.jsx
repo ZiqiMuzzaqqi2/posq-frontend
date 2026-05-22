@@ -1,13 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import Login from "../pages/auth/Login";
-import Dashboard from "../pages/dashboard/Dashboard";
-import ProtectedRoute from "../components/layouts/ProtectedRoute";
 import Monitoring from "../pages/test/Monitoring";
 import MainLayout from "../components/layouts/MainLayout";
+import ProtectedRoute from "../components/layouts/ProtectedRoute";
+
+import Login from "../pages/auth/Login";
+import Dashboard from "../pages/dashboard/Dashboard";
 import Branches from "../pages/branches/Branches";
 import Users from "../pages/users/Users";
+import Categories from "../pages/categories/Categories";
 import Products from "../pages/products/Products";
 
 const AppRouter = () => {
@@ -43,6 +45,7 @@ const AppRouter = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/branches" element={<Branches />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/categories" element={<Categories />} />
             <Route path="/products" element={<Products />} />
             <Route path="/transactions" element={<div>Transactions</div>} />
             <Route path="/reports" element={<div>Reports</div>} />
