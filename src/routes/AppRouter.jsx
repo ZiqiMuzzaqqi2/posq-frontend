@@ -11,6 +11,8 @@ import Branches from "../pages/branches/Branches";
 import Users from "../pages/users/Users";
 import Categories from "../pages/categories/Categories";
 import Products from "../pages/products/Products";
+import Stocks from "../pages/stocks/Stocks";
+import StockHistory from "../pages/stocks/StockHistory";
 
 const AppRouter = () => {
   return (
@@ -47,6 +49,10 @@ const AppRouter = () => {
             <Route path="/users" element={<Users />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/products" element={<Products />} />
+            
+            <Route path="/stocks" element={<Stocks />} />
+            <Route path="/stocks/history" element={<StockHistory />} />
+            
             <Route path="/transactions" element={<div>Transactions</div>} />
             <Route path="/reports" element={<div>Reports</div>} />
             <Route path="/settings" element={<div>Settings</div>} />

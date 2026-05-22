@@ -1,16 +1,125 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { Store, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { useState } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import {
+  Store,
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  ChevronDown,
+} from "lucide-react";
 import useAuthStore from "../../stores/authStore";
 import useMenu from "../../hooks/useMenu";
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuthStore();
-  const { menuItems } = useMenu(); // Menggunakan hook untuk mendapatkan menu
+  const { menuItems } = useMenu();
+
+  // State untuk mengontrol submenu yang terbuka
+  const [openSubmenus, setOpenSubmenus] = useState({});
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const toggleSubmenu = (label) => {
+    if (isCollapsed) return; // Jika sidebar collapsed, tidak bisa toggle
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
+  };
+
+  // Cek apakah submenu memiliki child yang active
+  const isChildActive = (children) => {
+    return children?.some((child) => location.pathname === child.path);
+  };
+
+  // Render menu item (bisa parent atau child)
+  const renderMenuItem = (item, isChild = false) => {
+    const hasChildren = item.children && item.children.length > 0;
+    const isOpen = openSubmenus[item.label];
+    const isActive = !hasChildren && location.pathname === item.path;
+    const isParentActive = hasChildren && isChildActive(item.children);
+
+    if (hasChildren) {
+      // Parent menu dengan children
+      return (
+        <li key={item.label}>
+          <button
+            onClick={() => toggleSubmenu(item.label)}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
+              ${
+                isParentActive || isOpen
+                  ? "bg-white/20 text-white shadow-md"
+                  : "text-white/70 hover:bg-white/10 hover:text-white"
+              } ${isCollapsed ? "justify-center" : "justify-between"}`}
+            title={isCollapsed ? item.label : ""}
+          >
+            <div className="flex items-center gap-3">
+              <item.icon size={20} />
+              <span
+                className={`transition-all duration-300 ${isCollapsed ? "hidden" : "block"}`}
+              >
+                {item.label}
+              </span>
+            </div>
+            {!isCollapsed && (
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+              />
+            )}
+          </button>
+
+          {/* Submenu children */}
+          {!isCollapsed && isOpen && (
+            <ul className="ml-6 mt-1 space-y-1 border-l border-white/20 pl-2">
+              {item.children.map((child) => renderMenuItem(child, true))}
+            </ul>
+          )}
+
+          {/* Tooltip untuk collapsed mode */}
+          {isCollapsed && (
+            <span className="absolute left-full ml-2 px-2 py-1 bg-dark text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
+              {item.label}
+            </span>
+          )}
+        </li>
+      );
+    }
+
+    // Single menu item (tanpa children)
+    return (
+      <li key={item.path}>
+        <NavLink
+          to={item.path}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
+            ${
+              isActive
+                ? "bg-white/20 text-white shadow-md"
+                : "text-white/70 hover:bg-white/10 hover:text-white"
+            } ${isCollapsed ? "justify-center" : ""}`
+          }
+          title={isCollapsed ? item.label : ""}
+        >
+          <item.icon size={20} />
+          <span
+            className={`transition-all duration-300 ${isCollapsed ? "hidden" : "block"}`}
+          >
+            {item.label}
+          </span>
+          {isCollapsed && (
+            <span className="absolute left-full ml-2 px-2 py-1 bg-dark text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
+              {item.label}
+            </span>
+          )}
+        </NavLink>
+      </li>
+    );
   };
 
   return (
@@ -40,41 +149,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 py-6">
+      <nav className="flex-1 py-6 overflow-y-auto h-[calc(90%-140px)]">
         <ul className="space-y-1 px-3">
-          {menuItems.map((item) => (
-            <li key={item.path}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group
-                  ${
-                    isActive
-                      ? "bg-white/20 text-white shadow-md"
-                      : "text-white/70 hover:bg-white/10 hover:text-white"
-                  } ${isCollapsed ? "justify-center" : ""}`
-                }
-                title={isCollapsed ? item.label : ""}
-              >
-                <item.icon size={20} />
-                <span
-                  className={`transition-all duration-300 ${isCollapsed ? "hidden" : "block"}`}
-                >
-                  {item.label}
-                </span>
-                {isCollapsed && (
-                  <span className="absolute left-full ml-2 px-2 py-1 bg-dark text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
-                    {item.label}
-                  </span>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {menuItems.map((item) => renderMenuItem(item))}
         </ul>
       </nav>
 
       {/* User Info & Logout Section */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/20">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/30 bg-gradient-to-t from-secondary to-accent">
         <div
           className={`flex items-center gap-3 mb-3 ${isCollapsed ? "justify-center" : ""}`}
         >

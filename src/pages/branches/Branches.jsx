@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, RefreshCw } from "lucide-react";
+import { Plus, Search, RefreshCw, Building2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { branchService } from "../../services/branchService";
 import BranchTable from "./components/BranchTable";
@@ -130,10 +130,19 @@ const Branches = () => {
     <div className="p-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-dark">Branches Management</h1>
-        <p className="text-gray text-sm mt-1">
-          Manage all store branches across your organization
-        </p>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-primary/20 rounded-xl">
+            <Building2 className="w-6 h-6 text-secondary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-dark">
+              Branches Management
+            </h1>
+            <p className="text-gray text-sm mt-1">
+              Manage all store branches across your organization
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Actions Bar */}

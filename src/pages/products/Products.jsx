@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, RefreshCw, Filter } from "lucide-react";
+import { Plus, Search, RefreshCw, Filter, Package } from "lucide-react";
 import toast from "react-hot-toast";
 import { productService } from "../../services/productService";
 import { categoryService } from "../../services/categoryService";
@@ -163,10 +163,19 @@ const Products = () => {
     <div className="p-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-dark">Products Management</h1>
-        <p className="text-gray text-sm mt-1">
-          Manage all products and inventory
-        </p>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-primary/20 rounded-xl">
+            <Package className="w-6 h-6 text-secondary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-dark">
+              Products Management
+            </h1>
+            <p className="text-gray text-sm mt-1">
+              Manage all products and inventory
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Actions Bar */}

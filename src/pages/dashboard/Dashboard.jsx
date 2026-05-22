@@ -232,22 +232,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Quick Actions */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {["New Sale", "Add Product", "Check Stock", "View Reports"].map(
-          (action, index) => (
-            <button
-              key={index}
-              className="bg-white/60 backdrop-blur-sm rounded-xl p-4 text-center hover:bg-white/80 
-                       hover:shadow-md transition-all duration-300 border border-white/50
-                       hover:-translate-y-0.5"
-            >
-              <p className="text-sm font-medium text-dark">{action}</p>
-            </button>
-          ),
-        )}
-      </div>
     </div>
   );
 };

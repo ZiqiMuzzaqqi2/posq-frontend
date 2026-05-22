@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import useAuthStore from '../stores/authStore';
-import { getMenuByRole, hasAccess, menus } from '../constants/menus';
+import { getMenuByRole, hasAccess, getFlatMenu, menuConfig } from '../constants/menus';
 
-// Hook untuk mendapatkan menu berdasarkan user yang login
 export const useMenu = () => {
     const { user } = useAuthStore();
 
@@ -11,6 +10,10 @@ export const useMenu = () => {
         return getMenuByRole(user.role);
     }, [user?.role]);
 
+    const flatMenu = useMemo(() => {
+        return getFlatMenu();
+    }, []);
+
     const checkAccess = useMemo(() => {
         return (path) => {
             if (!user?.role) return false;
@@ -18,12 +21,13 @@ export const useMenu = () => {
         };
     }, [user?.role]);
 
-    const getAllMenus = useMemo(() => menus, []);
+    const getAllMenus = useMemo(() => menuConfig, []);
 
     return {
-        menuItems,      // Menu yang diizinkan untuk user
-        checkAccess,    // Fungsi untuk cek akses ke path tertentu
-        getAllMenus,    // Semua menu (tanpa filter)
+        menuItems,      // Menu dengan struktur parent-children
+        flatMenu,       // Menu flat untuk routing
+        checkAccess,    // Fungsi cek akses
+        getAllMenus,    // Semua menu
     };
 };
 
